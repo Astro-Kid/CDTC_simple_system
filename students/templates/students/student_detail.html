@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ student.name }}</title>
+</head>
+<body>
+    <h1>{{ student.name }}</h1>
+    <p>Age: {{ student.age }}</p>
+    <p>Email: {{ student.email }}</p>
+    <p>Phone: {{ student.phone }}</p>
+    <p>Location: {{ student.location }}</p>
+    <p>Hobby: {{ student.hobby }}</p>
+    {% if student.cv %}
+        <p><a href="{{ student.cv.url }}">Download CV</a></p>
+    {% endif %}
+    <a href="{% url 'student_list' %}">Back to list</a>
+</body>
+</html>
