@@ -1,39 +1,26 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Student
-from .forms import StudentForm
+from django.urls import reverse_lazy
 
-def student_list(request):
-    students = Student.objects.all()
-    return render(request, 'students/student_list.html', {'students': students})
+class StudentListView(ListView):
+    model = Student
+    template_name = 'students/student_list.html'
 
-def student_detail(request, pk):
-    student = get_object_or_404(Student, pk=pk)
-    return render(request, 'students/student_detail.html', {'student': student})
+class StudentDetailView(DetailView):
+    model = Student
+    template_name = 'students/student_detail.html'
 
-def student_create(request):
-    if request.method == "POST":
-        form = StudentForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('student_list')
-    else:
-        form = StudentForm()
-    return render(request, 'students/student_form.html', {'form': form})
+class StudentCreateView(CreateView):
+    model = Student
+    template_name = 'students/student_form.html'
+    fields = ['name', 'age', 'email', 'phone', 'location', 'hobby']
 
-def student_update(request, pk):
-    student = get_object_or_404(Student, pk=pk)
-    if request.method == "POST":
-        form = StudentForm(request.POST, request.FILES, instance=student)
-        if form.is_valid():
-            form.save()
-            return redirect('student_list')
-    else:
-        form = StudentForm(instance=student)
-    return render(request, 'students/student_form.html', {'form': form})
+class StudentUpdateView(UpdateView):
+    model = Student
+    template_name = 'students/student_form.html'
+    fields = ['name', 'age', 'email', 'phone', 'location', 'hobby']
 
-def student_delete(request, pk):
-    student = get_object_or_404(Student, pk=pk)
-    if request.method == "POST":
-        student.delete()
-        return redirect('student_list')
-    return render(request, 'students/student_confirm_delete.html', {'student': student})
+class StudentDeleteView(DeleteView):
+    model = Student
+    template_name = 'students/student_confirm_delete.html'
+    success_url = reverse_lazy('student-list')
